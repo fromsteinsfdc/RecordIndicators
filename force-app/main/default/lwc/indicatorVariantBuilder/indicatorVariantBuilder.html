@@ -1,0 +1,99 @@
+<template>
+    <template lwc:if={variant}>
+        <!-- <p>{variantString}</p> -->
+        <div class="slds-grid slds-gutters slds-gutters_direct">            
+            <div class="slds-col slds-size_10-of-12 slds-grid slds-wrap slds-border_right">
+                <template lwc:if={variant.canBeDeleted}>
+                    <div class="nameAndLabelContainer slds-col slds-size_1-of-1 slds-grid slds-p-horizontal_none">
+                        <div class="slds-col">
+                            <lightning-input label="Variant Label" value={variant.Label} data-property="Label"
+                                oncommit={handleLabelChange} onblur={setApiNameFromLabel} required
+                                disabled={disabled}></lightning-input>
+                        </div>
+                        <div class="slds-p-left_small slds-p-top_large">
+                            <lightning-button label="Delete Variant"></lightning-button>
+                        </div>
+                        <!-- <div class="slds-col slds-size_1-of-2">
+                            <lightning-input label="Variant Label" value={variant.Label} data-property="Label"
+                                oncommit={handleLabelChange} onblur={setApiNameFromLabel} required
+                                disabled={disabled}></lightning-input>
+                        </div>
+                        <div class="slds-col slds-size_1-of-2">
+                            <lightning-input label="Variant API Name" class="apiName" value={variant.DeveloperName} data-property="DeveloperName"
+                                oncommit={handleApiNameChange} onblur={handleApiNameChange} max-length={maxApiNameLength}
+                                message-when-pattern-mismatch={messageWhenPatternMismatch} required
+                                disabled={disabled}></lightning-input>
+                        </div> -->
+                    </div>
+                </template>
+                <div class="variantDesign slds-col slds-size_1-of-1 slds-p-top_xx-small">
+                    <p><strong>Design</strong></p>
+                    <lightning-combobox label="Select Icon Source" options={iconSourceOptions}
+                        value={variant.iconSource} dropdown-alignment="auto" data-property="iconSource"
+                        onchange={handleVariantPropertyChange} disabled={disabled} required></lightning-combobox>
+                    <div class="iconSourceInputs">
+                        <template lwc:if={iconSourceIs.sldsIcon}>
+                            <c-combobox label="Select Icon" options={iconOptions} icon-size="small"
+                                value={variant.sourceValue} data-property="sourceValue"
+                                onchange={handleVariantPropertyChange} disabled={disabled} required></c-combobox>
+                        </template>
+                        <template lwc:elseif={iconSourceIs.url}>
+                            <lightning-input label="Enter URL" value={variant.sourceValue}
+                                data-property="sourceValue" onchange={handleVariantPropertyChange}
+                                disabled={disabled} required></lightning-input>
+                        </template>
+                        <template lwc:elseif={iconSourceIs.staticResource}>
+                            <lightning-input label="Select Static Resource" value={variant.sourceValue}
+                                data-property="sourceValue" onchange={handleVariantPropertyChange}
+                                disabled={disabled} required></lightning-input>
+                        </template>
+                        <template lwc:elseif={iconSourceIs.staticText}>
+                            <lightning-input label="Enter Static Text" value={variant.sourceValue}
+                                class="slds-p-top_xxx-small" data-property="sourceValue"
+                                onchange={handleVariantPropertyChange} disabled={disabled} required></lightning-input>
+                        </template>
+                        <lightning-input label="Hover Text" value={variant.hoverText} data-property="hoverText"
+                            onchange={handleVariantPropertyChange} disabled={disabled}></lightning-input>
+                        <template lwc:if={showColourOption}>
+                            <lightning-input label="Override Colours" type="checkbox" data-property="overrideColours"
+                                checked={variant.overrideColours} onchange={handleVariantPropertyChange}
+                                disabled={disabled}></lightning-input>
+                        </template>
+                        <template lwc:if={showColourSelectors}>
+                            <div class="colourContainer slds-grid slds-gutters">
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input label="Select Foreground Colour" type="color"
+                                        data-property="foregroundColour" value={variant.foregroundColour}
+                                        onchange={handleVariantPropertyChange} disabled={disabled}></lightning-input>
+                                </div>
+                                <div class="slds-col slds-size_1-of-2">
+                                    <lightning-input label="Select Background Colour" type="color"
+                                        data-property="backgroundColour" value={variant.backgroundColour}
+                                        onchange={handleVariantPropertyChange} disabled={disabled}></lightning-input>
+                                </div>
+                            </div>
+                        </template>
+
+                    </div>
+                </div>
+                <template lwc:if={variant.canBeDeleted}>
+                    <div class="variantLogic slds-col slds-size_1-of-1 slds-p-top_xx-small">
+                        <p><strong>Logic</strong></p>
+                        <c-expression-builder object-name={indicator.Object_Name__c} hide-name-and-label
+                            disabled={disabled} required></c-expression-builder>
+                    </div>
+                </template>
+            </div>
+            <div>
+                <h2 class="slds-text-heading_small slds-col">Preview</h2>
+                <div class="slds-col">
+                    <c-indicator-bundle-item icon-source={variant.iconSource}
+                        source-value={variant.sourceValue} ind-size="large"
+                        ind-foreground-color={variant.foregroundColour}
+                        ind-background-color={variant.backgroundColour} ind-hover-text={variant.hoverText}>
+                    </c-indicator-bundle-item>
+                </div>
+            </div>
+        </div>
+    </template>
+</template>

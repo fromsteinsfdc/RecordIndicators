@@ -1,0 +1,65 @@
+<template>
+    <article class="slds-card">
+        <div class="slds-card__header slds-grid">
+            <h2 class="slds-card__header-title slds-col">
+                <span>Indicator Builder</span>
+            </h2>
+            <div>
+                <lightning-button label="Save" variant="brand"></lightning-button>
+            </div>
+        </div>
+        <div class="slds-card__body slds-card__body_inner">
+            {indicatorString}
+            <div class="indicatorDetailsContainer slds-grid slds-wrap slds-gutters">
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input label="Indicator Item Label" value={indicator.Label} oncommit={handleLabelChange} onblur={setApiNameFromLabel} data-property="Label" required></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-2">
+                    <lightning-input label="Indicator Item API Name" class="apiName" value={indicator.DeveloperName} oncommit={handleApiNameChange} onblur={handleApiNameChange} data-property="DeveloperName" required></lightning-input>
+                </div>
+                <div class="slds-col slds-size_1-of-1">
+                    <c-object-selector value={indicator.Object_Name__c} onchange={handleIndicatorPropertyChange} data-property="Object_Name__c" required notify-on-clear onclearrequest={handleObjectClearRequest}></c-object-selector>
+                </div>
+                <!-- <div class="slds-col slds-size_1-of-1">
+                    <lightning-textarea label="Description" value={indicator.Description__c}></lightning-textarea>
+                </div> -->
+            </div>
+            <div class="slds-vertical-tabs slds-m-top_small">
+                <ul class="slds-vertical-tabs__nav" role="tablist" aria-orientation="vertical">
+                    <li class="slds-grid slds-grid_vertical-align-center">
+                        <div class="slds-col slds-p-around_small"><strong>Indicator Variants</strong>
+                        </div>
+                        <div class="slds-p-around_x-small">
+                            <lightning-button-icon icon-name="utility:add"
+                                onclick={handleAddVariantClick} disabled={missingObjectName}></lightning-button-icon>
+                        </div>
+                    </li>
+                    <template for:each={tabs} for:item="tab" for:index="index">
+                        <li class={tab.tabClass} title={tab.variant.label} role="presentation" key={tab.index}
+                            data-index={index} onclick={handleTabAnchorClick}>
+                            <a class="slds-vertical-tabs__link slds-is-relative tabLink" href="#" role="tab">
+                                <c-indicator-bundle-item icon-source={tab.variant.iconSource}
+                                    source-value={tab.variant.sourceValue} ind-size="x-small"
+                                    ind-foreground-color={tab.variant.foregroundColour}
+                                    ind-background-color={tab.variant.backgroundColour}
+                                    ind-hover-text={tab.variant.hoverText}>
+                                </c-indicator-bundle-item>
+                                <span class="slds-truncate" title={tab.tabLabel}>{tab.tabLabel}</span>
+                                <template lwc:if={tab.variant.canBeDeleted}>
+                                    <lightning-button-icon icon-name="utility:delete" variant="bare"
+                                        class="deleteVariantButton" data-index={index}
+                                        onclick={handleVariantDeleteClick}></lightning-button-icon>
+                                </template>
+                            </a>
+                        </li>
+                    </template>
+                </ul>
+                <div class="slds-vertical-tabs__content slds-show tabSet" role="tabpanel">
+                    <c-indicator-variant-builder indicator={indicator} variant={activeVariant}
+                        icon-options={iconOptions}
+                        onvariantchange={handleActiveVariantChange} disabled={missingObjectName}></c-indicator-variant-builder>
+                </div>
+            </div>
+        </div>
+    </article>
+</template>
